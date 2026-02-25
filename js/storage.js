@@ -7,7 +7,7 @@ function onArchiveSync(cb) {
 }
 
 function loadArchive() {
-  if (isListening) return; 
+  if (isListening) return;
   isListening = true;
 
   ARCHIVE_REF.on("value", (snapshot) => {
@@ -23,5 +23,5 @@ function loadArchive() {
 
 function addToArchive(entry) {
   return ARCHIVE_REF.child(entry.id).set(entry)
-    .catch(err => console.error("Firebase write failed:", err));
+    .catch((err) => console.error("Firebase write failed:", err));
 }

@@ -75,7 +75,7 @@ function mountP5(targetId) {
 
       const showSea = !!data.sea;
       const showRiver = !showSea && !!data.river;
-      const showPond = !showSea && !showRiver && (data.pond || true);
+      const showPond = !showSea && !showRiver;
 
       // river or pond
       p.noStroke();
@@ -208,7 +208,7 @@ function renderStaticThumbnail(containerEl, rules, seed, size = 220) {
 
   const showSea = !!rules.sea;
   const showRiver = !showSea && !!rules.river;
-  const showPond = !showSea && !showRiver && (rules.pond || true);
+  const showPond = !showSea && !showRiver;
   const riverCenterY = (x) => {
     return size * (0.32 + 0.18 * Math.sin((x / size) * Math.PI * 1.2));
   };

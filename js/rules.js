@@ -1,21 +1,23 @@
 function parseTextToRules(text) {
   const lower = text.toLowerCase();
   const words = lower
-    .toLowerCase()
     .replace(/[^\w\s-]/g, " ")
     .split(/\s+/)
     .filter(Boolean);
 
-  const hasAny = (list) => list.some(w => words.includes(w));
+  const hasAny = (list) => list.some((w) => words.includes(w));
   const hasPhrase = (phrase) => lower.includes(phrase);
-  const hasAnyPhrase = (list) => list.some(p => lower.includes(p));
+  const hasAnyPhrase = (list) => list.some((p) => lower.includes(p));
+
+  const frogKeywords = ["frog", "toad", "animal", "creature", "froggy"];
+  const rippleKeywords = ["ripple", "disturb", "break", "move", "movement", "waves", "rings", "vibrate", "vibration", "circle"];
 
   return {
-    frogs: words.filter(w => ["frog", "toad", "animal", "creature", "froggy"].some(k => w.includes(k))).length,
-    frogSize: hasAnyPhrase(["tiny", "mini", "baby frog" ,"small"]) ? "small"
-      : hasAnyPhrase(["big","large", "huge", "ginormous", "daddy frog", "mommy frog"]) ? "large"
+    frogs: words.filter((w) => frogKeywords.some((k) => w.includes(k))).length,
+    frogSize: hasAnyPhrase(["tiny", "mini", "baby frog", "small"]) ? "small"
+      : hasAnyPhrase(["big", "large", "huge", "ginormous", "daddy frog", "mommy frog"]) ? "large"
       : "normal",
-    ripples: words.filter(w => ["ripple", "disturb", "break", "move", "movement", "waves", "rings", "vibrate", "vibration", "circle"].some(k => w.includes(k))).length,
+    ripples: words.filter((w) => rippleKeywords.some((k) => w.includes(k))).length,
     pond: hasAny(["pond", "pool", "water", "surface", "body"]) || hasPhrase("body of water"),
     river: hasAny(["river", "stream", "canal"]),
     sea: hasAny(["sea", "ocean", "lake"]) || hasPhrase("large body of water"),

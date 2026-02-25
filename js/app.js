@@ -8,7 +8,6 @@ function clampWordCount(text, maxWords = 40) {
 }
 
 function hashToSeed(str) {
-  // small deterministic hash -> uint32
   let h = 2166136261;
   for (let i = 0; i < str.length; i++) {
     h ^= str.charCodeAt(i);
@@ -41,16 +40,6 @@ function renderArchiveGrid(items) {
     grid.appendChild(card);
   });
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  showStep(1);
-
-  onArchiveSync((items) => {
-    renderArchiveGrid(items);
-  });
-
-  loadArchive(); // attach listener ONCE
-});
 function resetToStart() {
   showStep(1);
   const descInput = document.getElementById("descriptionInput");
@@ -83,8 +72,13 @@ function closeModal() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // mount main p5 canvas
   mountP5("p5Mount");
+  showStep(1);
+
+  onArchiveSync((items) => {
+    renderArchiveGrid(items);
+  });
+  loadArchive();
 
   const toStep2 = document.getElementById("toStep2");
   const backTo1 = document.getElementById("backTo1");
@@ -103,7 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalBackdrop = document.getElementById("modalBackdrop");
   const modalClose = document.getElementById("modalClose");
 
-  // word counter (40 words)
   function updateCounter() {
     const wc = clampWordCount(descInput.value, 40);
     counter.textContent = `${wc}/40`;
@@ -122,7 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const text = descInput.value.trim();
     finalDescription.value = text;
 
-    // You can enforce 40 word max if you want:
     const wc = clampWordCount(text, 40);
     if (wc > 40) {
       alert("Please keep your description to 40 words or fewer.");
@@ -130,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     lastRules = parseTextToRules(text);
-    lastSeed = hashToSeed(text + "|" + Date.now()); // new each translate (or remove Date.now to keep stable)
+    lastSeed = hashToSeed(text + "|" + Date.now());
     setCurrentRender(lastRules, lastSeed);
 
     showStep(3);
@@ -160,7 +152,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     addToArchive(entry);
 
-    // reset to start (optional)
     resetToStart();
     updateCounter();
   });
@@ -173,5 +164,4 @@ document.addEventListener("DOMContentLoaded", () => {
   // Modal
   modalBackdrop.addEventListener("click", closeModal);
   modalClose.addEventListener("click", closeModal);
-
 });
