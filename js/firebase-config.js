@@ -13,6 +13,9 @@
   };
 
 // Initialize Firebase
+let database;
+let ARCHIVE_REF;
+
 firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
-const ARCHIVE_REF = database.ref("archive");
+database = firebase.database();
+ARCHIVE_REF = database.ref("archive");
