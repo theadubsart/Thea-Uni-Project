@@ -72,6 +72,29 @@ function closeModal() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  const homeView = document.getElementById("homeView");
+  const archiveView = document.getElementById("archiveView");
+  const viewArchiveBtn = document.getElementById("viewArchiveBtn");
+  const aboutProjectBtn = document.getElementById("aboutProjectBtn");
+
+  function showArchiveView() {
+    homeView.classList.add("hidden");
+    archiveView.classList.remove("hidden");
+    aboutProjectBtn.classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  function showHomeView() {
+    closeModal();
+    archiveView.classList.add("hidden");
+    homeView.classList.remove("hidden");
+    aboutProjectBtn.classList.add("hidden");
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  viewArchiveBtn.addEventListener("click", showArchiveView);
+  aboutProjectBtn.addEventListener("click", showHomeView);
+
   mountP5("p5Mount");
   showStep(1);
 
