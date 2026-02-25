@@ -100,20 +100,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const ageInput = document.getElementById("ageInput");
   const nationInput = document.getElementById("nationInput");
 
-  const exportBtn = document.getElementById("exportBtn");
-  const importFile = document.getElementById("importFile");
-  const clearBtn = document.getElementById("clearBtn");
-
   const modalBackdrop = document.getElementById("modalBackdrop");
   const modalClose = document.getElementById("modalClose");
-
-showStep(1);
-
-onArchiveSync(() => {
-  renderArchiveGrid();
-});
-
-loadArchive(); 
 
   // word counter (40 words)
   function updateCounter() {
@@ -186,30 +174,4 @@ loadArchive();
   modalBackdrop.addEventListener("click", closeModal);
   modalClose.addEventListener("click", closeModal);
 
-  // Export / Import / Clear
-exportBtn.addEventListener("click", () => {
-  downloadJSON("archive.json", getArchive());
-});
-
-  importFile.addEventListener("change", async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const text = await file.text();
-    try {
-      const imported = importArchiveFromJSONText(text);
-      saveArchive(imported);
-      alert("Imported archive.");
-    } catch (err) {
-      alert("Import failed: " + err.message);
-    } finally {
-      importFile.value = "";
-    }
-  });
-
-  clearBtn.addEventListener("click", () => {
-    if (!confirm("Clear the local archive on this browser?")) return;
-    clearArchive();
-    renderArchiveGrid();
-  });
 });

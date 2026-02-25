@@ -111,14 +111,6 @@
       <h2 class="archive-title">COMMUNITY ARCHIVE</h2>
       <div class="archive-grid" id="archiveGrid"></div>
 
-      <div class="archive-actions">
-        <button class="btn subtle" id="exportBtn">EXPORT JSON</button>
-        <label class="btn subtle fileBtn">
-          IMPORT JSON
-          <input type="file" id="importFile" accept="application/json" hidden />
-        </label>
-        <button class="btn subtle danger" id="clearBtn">CLEAR LOCAL ARCHIVE</button>
-      </div>
     </section>
   </main>
 
@@ -138,8 +130,9 @@
     </div>
   </div>
 
-  <!-- Firebase SDK (Compat) -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-compat.js"></script>
+  <!-- Firebase SDK (Compat, component-only) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   
   <script src="./js/firebase-config.js"></script>
   <script src="./js/rules.js"></script>

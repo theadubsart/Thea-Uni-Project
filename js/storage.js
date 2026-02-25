@@ -24,26 +24,7 @@ function loadArchive() {
   });
 }
 
-// Optional accessor
-function getArchive() {
-  return archiveData;
-}
-
 function addToArchive(entry) {
   return ARCHIVE_REF.child(entry.id).set(entry)
     .catch(err => console.error("Firebase write failed:", err));
-}
-
-function clearArchive() {
-  return ARCHIVE_REF.remove()
-    .catch(err => console.error("Firebase remove failed:", err));
-}
-
-function saveArchive(items) {
-  const obj = items.reduce((acc, item) => {
-    acc[item.id] = item;
-    return acc;
-  }, {});
-  return ARCHIVE_REF.set(obj)
-    .catch(err => console.error("Firebase set failed:", err));
 }
