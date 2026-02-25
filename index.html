@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Haiku Translation System</title>
+
+  <!-- Jost (online version; swap to @font-face if you want offline) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">THEA DUBOIS</div>
+  </header>
+
+  <main class="container">
+    <!-- STEPS SECTION -->
+    <section class="steps">
+      <!-- STEP 1 -->
+      <div class="step" id="step1">
+        <h2 class="step-title">STEP 1</h2>
+        <p class="step-subtitle">PLEASE READ THE HAIKU BELOW AND IMAGINE<br/>THE SCENE IN YOUR MIND</p>
+
+        <div class="poem-wrap">
+          <div class="arrow">▼</div>
+          <div class="poem-box">
+            <div class="poem">
+              <p>An old silent pond,</p>
+              <p>A frog jumps into the pond,</p>
+              <p><strong>SPLASH!</strong> Silence again.</p>
+            </div>
+          </div>
+
+          <div class="poem-footer">
+            <div class="poem-credit">POEM BY MATSUO BASHŌ</div>
+            <button class="btn" id="toStep2">NEXT</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step hidden" id="step2">
+        <h2 class="step-title">STEP 2</h2>
+        <p class="step-subtitle">
+          DESCRIBE WHAT YOU SAW IN AS MUCH DETAIL<br/>
+          AS POSSIBLE IN THE BOX BELOW. THEN CLICK<br/>
+          TRANSLATE TO GENERATE YOUR DESCRIPTION<br/>
+          VISUALLY.
+        </p>
+
+        <div class="input-wrap">
+          <textarea id="descriptionInput" maxlength="240" placeholder=""></textarea>
+          <div class="counter" id="wordCounter">0/40</div>
+        </div>
+
+        <div class="row">
+          <button class="icon-btn" id="backTo1" aria-label="Back">↩</button>
+          <button class="btn wide" id="translateBtn">TRANSLATE</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step hidden" id="step3">
+        <div class="step3-grid">
+          <div>
+            <h3 class="panel-title">YOUR VISUAL</h3>
+            <div class="visual-frame">
+              <!-- p5 will inject canvas here -->
+              <div id="p5Mount"></div>
+            </div>
+            <button class="icon-btn" id="regenBtn" aria-label="Regenerate">↻</button>
+
+          </div>
+
+          <div>
+            <h2 class="step-title right">STEP 3</h2>
+            <p class="step-subtitle right">
+              PLEASE PROVIDE THE INFORMATION BELOW.<br/>
+              THEN CLICK SAVE TO ADD YOUR WORK TO THE<br/>
+              COMMUNITY ARCHIVE.
+            </p>
+
+            <label class="label">YOUR AGE</label>
+            <input class="text" id="ageInput" inputmode="numeric" placeholder="" />
+
+            <label class="label">YOUR NATIONALITY/BACKGROUND</label>
+            <input class="text" id="nationInput" placeholder="" />
+
+            <label class="label">DESCRIPTION</label>
+            <textarea class="textAreaSmall" id="finalDescription" readonly></textarea>
+
+            <div class="action-row">
+              <button class="btn full" id="saveBtn">SAVE TO ARCHIVE</button>
+              <button class="icon-btn square" id="cancelStep3" aria-label="Back">
+                <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMMUNITY ARCHIVE -->
+    <section class="archive">
+      <h2 class="archive-title">COMMUNITY ARCHIVE</h2>
+      <div class="archive-grid" id="archiveGrid"></div>
+
+      <div class="archive-actions">
+        <button class="btn subtle" id="exportBtn">EXPORT JSON</button>
+        <label class="btn subtle fileBtn">
+          IMPORT JSON
+          <input type="file" id="importFile" accept="application/json" hidden />
+        </label>
+        <button class="btn subtle danger" id="clearBtn">CLEAR LOCAL ARCHIVE</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL -->
+  <div class="modal hidden" id="modal">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-card">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-body">
+        <div class="modal-visual" id="modalVisual"></div>
+        <div class="modal-meta">
+          <div class="meta-big" id="modalAge"></div>
+          <div class="meta-big" id="modalNation"></div>
+          <div class="meta-desc" id="modalDesc"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js"></script>
+  
+  <script src="./js/firebase-config.js"></script>
+  <script src="./js/rules.js"></script>
+  <script src="./js/storage.js"></script>
+  <script src="./js/visuals.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>
