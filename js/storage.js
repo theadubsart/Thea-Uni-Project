@@ -1,68 +1,49 @@
-// Firebase Realtime Database storage
-
 let archiveData = [];
 let syncCallback = null;
+let isListening = false;
 
-// Set callback to update UI when data changes
-function onArchiveSync(callback) {
-  syncCallback = callback;
+function onArchiveSync(cb) {
+  syncCallback = cb;
 }
 
-// Load archive from Firebase and listen for real-time updates
+// Attach realtime listener ONCE
 function loadArchive() {
-  return new Promise((resolve) => {
-    ARCHIVE_REF.on("value", (snapshot) => {
-      const data = snapshot.val();
-      archiveData = data ? Object.values(data) : [];
-      
-      // Sort by createdAt descending (newest first)
-      archiveData.sort((a, b) => {
-        const timeA = new Date(a.createdAt).getTime();
-        const timeB = new Date(b.createdAt).getTime();
-        return timeB - timeA;
-      });
-      
-      // Call sync callback if set (to update UI)
-      if (syncCallback) {
-        syncCallback();
-      }
-      
-      resolve(archiveData);
-    });
+  if (isListening) return; // prevent duplicate listeners
+  isListening = true;
+
+  ARCHIVE_REF.on("value", (snapshot) => {
+    const data = snapshot.val();
+
+    // Convert object {id: entry, ...} -> array
+    archiveData = data ? Object.values(data) : [];
+
+    // Sort newest first
+    archiveData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    if (syncCallback) syncCallback(archiveData);
   });
 }
 
-function saveArchive(items) {
-  // Clear and rebuild the entire archive
-  ARCHIVE_REF.set(items.reduce((acc, item) => {
-    acc[item.id] = item;
-    return acc;
-  }, {}));
+// Optional accessor
+function getArchive() {
+  return archiveData;
 }
 
 function addToArchive(entry) {
-  ARCHIVE_REF.child(entry.id).set(entry)
+  return ARCHIVE_REF.child(entry.id).set(entry)
     .catch(err => console.error("Firebase write failed:", err));
 }
 
 function clearArchive() {
-  ARCHIVE_REF.remove()
+  return ARCHIVE_REF.remove()
     .catch(err => console.error("Firebase remove failed:", err));
 }
 
-function downloadJSON(filename, dataObj) {
-  const blob = new Blob([JSON.stringify(dataObj, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function importArchiveFromJSONText(text) {
-  const parsed = JSON.parse(text);
-  if (!Array.isArray(parsed)) throw new Error("JSON must be an array of entries.");
-  // Basic sanity filter:
-  return parsed.filter(e => e && e.id && e.rules && typeof e.seed === "number");
+function saveArchive(items) {
+  const obj = items.reduce((acc, item) => {
+    acc[item.id] = item;
+    return acc;
+  }, {});
+  return ARCHIVE_REF.set(obj)
+    .catch(err => console.error("Firebase set failed:", err));
 }

@@ -23,13 +23,11 @@ function showStep(n) {
   document.getElementById("step3").classList.toggle("hidden", n !== 3);
 }
 
-function renderArchiveGrid() {
+function renderArchiveGrid(items) {
   const grid = document.getElementById("archiveGrid");
-
   grid.innerHTML = "";
 
-  // archiveData is always an array
-  archiveData.forEach((entry) => {
+  items.forEach((entry) => {
     const card = document.createElement("div");
     card.className = "archive-card";
     card.title = "Open";
@@ -44,6 +42,15 @@ function renderArchiveGrid() {
   });
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  showStep(1);
+
+  onArchiveSync((items) => {
+    renderArchiveGrid(items);
+  });
+
+  loadArchive(); // attach listener ONCE
+});
 function resetToStart() {
   showStep(1);
   const descInput = document.getElementById("descriptionInput");
@@ -181,7 +188,7 @@ loadArchive();
 
   // Export / Import / Clear
 exportBtn.addEventListener("click", () => {
-  downloadJSON("archive.json", archiveData);
+  downloadJSON("archive.json", getArchive());
 });
 
   importFile.addEventListener("change", async (e) => {
